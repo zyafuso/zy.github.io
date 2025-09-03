@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 0 - CS180 Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">zyafuso.github.io</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">Project 0</h1>
+            </div>
+        </section>
+
+        <section class="project-0-section">
+            <div class="container">
+                <div class="project-0-container">
+                    <!-- Title Section -->
+                    <div class="project-0-title">
+                        <h2>Becoming Friends with Your Camera</h2>
+                        <p>The goal of this project is to gain some intuitive understanding of the somewhat subtle relationship between perspective, focal length/zoom, and the center of projection. Here are some photos I took to illustrate these concepts.</p>
+                    </div>
+
+                                         <!-- Kai Images Section -->
+                     <div class="image-section">
+                         <h3>Selfie: The Wrong Way vs. The Right Way</h3>
+                         <div class="image-pair">
+                             <div class="image-item">
+                                 <img src="../proj0/kai_close.jpg" alt="Kai Close Up" class="project-image">
+                                 <p class="image-caption">Portrait @ 5cm Away</p>
+                             </div>
+                             <div class="image-item">
+                                 <img src="../proj0/kai_far.jpg" alt="Kai Far View" class="project-image">
+                                 <p class="image-caption">Portrait @ 2m Away</p>
+                             </div>
+                         </div>
+                         <div class="combined-description">
+                             <p>Say hello to my friend Kai! Here he is at two very different perspectives. When taking a selfie, you may have noticed yourself that you look more natural when the camera is further away. This is because cameras require a larger field of view or shorter focal length to capture when up close.</p>
+                         </div>
+                     </div>
+
+                                         <!-- Wurster Images Section -->
+                     <div class="image-section">
+                         <h3>Architectural Perspective Compression</h3>
+                         <div class="image-pair">
+                             <div class="image-item">
+                                 <img src="../proj0/wurster_close.jpg" alt="Wurster Close Up" class="project-image">
+                                 <p class="image-caption">Wurster Hall (Close - No Zoom)</p>
+                             </div>
+                             <div class="image-item">
+                                 <img src="../proj0/wurster_far.jpg" alt="Wurster Far View" class="project-image">
+                                 <p class="image-caption">Wurster Hall (Far - Zoom)</p>
+                             </div>
+                         </div>
+                         <div class="combined-description">
+                             <p>These images capture Wurster from contrasting perespectives. Similar to the portraits, the close up makes the depth of the image more tangible. The zoomed in image from far away should appear more compressed. The image is more "flat" because depth is less apparent.</p>
+                         </div>
+                     </div>
+
+                                         <!-- Pappy Images Section -->
+                     <div class="image-section">
+                         <h3>The Dolly Zoom</h3>
+                         <div class="pappy-container">
+                             <div class="pappy-gif">
+                                 <h4>Pappy Animation Sequence</h4>
+                                 <img src="../proj0/pappy (1).jpg" alt="Pappy Animation" class="pappy-gif-image" id="pappyGif">
+                                 <button class="play-btn" onclick="playPappyAnimation()">Play Animation</button>
+                             </div>
+                             <div class="pappy-slideshow">
+                                 <h4>Individual Frame Inspection</h4>
+                                 <div class="pappy-main">
+                                     <img src="../proj0/pappy (1).jpg" alt="Pappy Frame 1" class="pappy-main-image" id="pappyMain">
+                                     <div class="pappy-controls">
+                                         <button class="pappy-btn" onclick="changePappyImage(1)">Frame 1</button>
+                                         <button class="pappy-btn" onclick="changePappyImage(2)">Frame 2</button>
+                                         <button class="pappy-btn" onclick="changePappyImage(3)">Frame 3</button>
+                                         <button class="pappy-btn" onclick="changePappyImage(4)">Frame 4</button>
+                                     </div>
+                                 </div>
+                                 <div class="pappy-thumbnails">
+                                     <img src="../proj0/pappy (1).jpg" alt="Pappy Frame 1" class="pappy-thumbnail active" onclick="changePappyImage(1)">
+                                     <img src="../proj0/pappy (2).jpg" alt="Pappy Frame 2" class="pappy-thumbnail" onclick="changePappyImage(2)">
+                                     <img src="../proj0/pappy (3).jpg" alt="Pappy Frame 3" class="pappy-thumbnail" onclick="changePappyImage(3)">
+                                     <img src="../proj0/pappy (4).jpg" alt="Pappy Frame 4" class="pappy-thumbnail" onclick="changePappyImage(4)">
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="combined-description">
+                             <p>The dolly zoom effect is a cinematic technique that creates a disorienting visual effect by simultaneously moving the camera forward or backward while zooming in or out to keep the subject the same scale. This creates a unique perspective where the subject appears to stay the same size while the background dramatically changes, producing a sense of vertigo or unease. This is also named the "Vertigo shot" after the famous scene in Hitchcock's Vertigo. <br><br>
+                                In this sequence, you can see how the perspective around the pappy statue while maintaining the same framing of the subject. This makes the trees in the background warp or distort inward while the field of view expands behind pappy. </p>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
