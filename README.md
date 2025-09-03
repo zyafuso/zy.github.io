@@ -1,2 +1,2 @@
-# zy.github.io
+# zyafuso.github.io
 CS180 Website
