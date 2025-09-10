@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 1 - CS180 Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">zyafuso.github.io</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">Project 1</h1>
+            </div>
+        </section>
+
+        <section class="project-content">
+            <div class="container">
+                <div class="project-container">
+                    <!-- Title Section -->
+                    <div class="project-intro">
+                        <h2>Colorizing Historical Images</h2>
+                        <p>The goal of this project is to colorize historical black and white images by aligning color channels from Prokudin-Gorskii's glass plate negatives. Using normalized cross-correlation and recursive pyramid alignment, we can reconstruct full-color images from the original three-channel captures.<br><br></p>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj1/cathedral.jpg" alt="Cathedral Original" class="content-image clickable-image">
+                                <p class="content-caption">Original Glass Plate</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj1/cathedral_none.jpg" alt="Cathedral No Alignment" class="content-image clickable-image">
+                                <p class="content-caption">No alignment</p>
+                            </div>
+                        </div>
+                        <p><br><br>Above is an example of how Prokudin-Gorskii would take color images with a grayscale sensor. By taking 3 images of the same scene and using different color glass plates, each image now has color intensity data! Now the goal is to properly align each frame. The mess on the right is how this shot of a cathedral looks if you split it in 3 even parts and combine them with no alignment algorithms.</p>
+                    </div>
+
+                    <!-- Technical Details -->
+                    <div class="content-section">
+                        <h3>Technical Implementation</h3>
+                        <div class="tech-specs">
+                            <div class="spec-item">
+                                <h4>Normalized Cross-Correlation (NCC)</h4>
+                                <p>NCC measures the similarity between two images by computing the dot product of their normalized vectors. This method provides a somewhat reliable similarity metric based on pixel intensity alone.</p>
+                            </div>
+                            <div class="spec-item">
+                                <h4>L2 Norm Alignment</h4>
+                                <p>L2 norm alignment minimizes the sum of squared differences between corresponding pixels in two images. Similar to NCC, this metric is based on pixel intensity. For that reason, they both struggle when brightness of different frames are vastly different.<br><br></p>
+                            </div>
+                            <div class="spec-item">
+                                <h4>Recursive Pyramid Alignment</h4>
+                                <p>The pyramid approach starts with a coarse alignment at low resolution and progressively refines the alignment at higher resolutions. Combine this pyramid alignment with one of the previous norms and you now have a multiscale approach is both efficient and robust to large displacements. This will be important for larger images where brute force computation is infeasible.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cathedral L2 vs NCC Comparison -->
+                    <div class="content-section">
+                        <h3>Cathedral L2 vs NCC Comparison</h3>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj1/cathedral_l2.jpg" alt="Cathedral L2 Alignment" class="content-image clickable-image">
+                                <p class="content-caption">L2 Norm Alignment</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj1/cathedral_ncc(1,-1)(7,-1).jpg" alt="Cathedral NCC Alignment" class="content-image clickable-image">
+                                <p class="content-caption">NCC Alignment</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <p>The basic idea of this alignment is to minimize the L2 norm between two color channels across a [-15,15] pixel window of displacement. Alternatively, you can maximize a NCC. Finally, combine the aligned layers. In my testing, neither L2 or NCC proved to be much more accurate than the other. These images are better than no alignment, but some ghosting is still visible from a slight misalignment. At the time, I didn't recognize this misalignment. </p>
+                        </div>
+                    </div>
+
+                    <!-- Large Scale Alignment -->
+                    <div class="content-section">
+                        <h3>Large Scale Alignment</h3>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj1/emir_nccpyramid_02crop.jpg" alt="Emir 4% Crop" class="content-image clickable-image">
+                                <p class="content-caption">Emir 4% Crop</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj1/emir_nccpyramid_01crop_3depth.jpg" alt="Emir 10% Crop" class="content-image clickable-image">
+                                <p class="content-caption">Emir 10% Crop</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <p>At larger scales, the brute force displacement window becomes unpractical. The image above is nearly 10 times taller and wider than the previous image. Here, a pyramid alignment is implemented. The image is scaled down to reduce information and alignment is performed at each level working back up to the original scale. 
+                                <br><br>While the algorithm was much faster, the images weren't perfect. Even on the left, there is a layer misalignment. While tweaking, I included an overall image frame crop, which removed some of the noisy frame which throws off the algorithm. However, my alignment function np.roll, causes edge rollover while aligning so cropping can only help so much.
+                                <br><br>The solution was to crop only the algorithm. I cropped 15% of the image from each edge before each Cross-Correlation, which forces the dot product to only take into account the pixels in the center of the image. This removes noisy edges with rollover and frame inconsistencies, making the algorithm much more consistent.</p>
+                        </div>
+                    </div>
+
+                    <!-- Final Results -->
+                    <div class="content-section">
+                        <h3>Final Results</h3>
+                        
+                        <!-- 3-wide grid of all final results -->
+                        <div class="gallery-grid">
+                            <div class="grid-item">
+                                <img src="proj1/cathedral_ncc.jpg" alt="Cathedral" class="content-image clickable-image">
+                                <p class="content-caption">Cathedral</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/tobolsk_5.jpg" alt="Tobolsk" class="content-image clickable-image">
+                                <p class="content-caption">Tobolsk</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/monastery_l2_bg-gr.jpg" alt="Monastery" class="content-image clickable-image">
+                                <p class="content-caption">Monastery</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/church_pyramid_5.jpg" alt="Church Pyramid" class="content-image clickable-image">
+                                <p class="content-caption">Church Pyramid</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/emir_5.jpg" alt="Emir" class="content-image clickable-image">
+                                <p class="content-caption">Emir</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/harvesters_pyramid_5.jpg" alt="Harvesters Pyramid" class="content-image clickable-image">
+                                <p class="content-caption">Harvesters Pyramid</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/italil_pyramid_5.jpg" alt="Italil Pyramid" class="content-image clickable-image">
+                                <p class="content-caption">Italil Pyramid</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/lastochikino_5.jpg" alt="Lastochikino" class="content-image clickable-image">
+                                <p class="content-caption">Lastochikino</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/lugano_5.jpg" alt="Lugano" class="content-image clickable-image">
+                                <p class="content-caption">Lugano</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/melons_5.jpg" alt="Melons" class="content-image clickable-image">
+                                <p class="content-caption">Melons</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/self_portrait 5.jpg" alt="Self Portrait" class="content-image clickable-image">
+                                <p class="content-caption">Self Portrait</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/siren_5.jpg" alt="Siren" class="content-image clickable-image">
+                                <p class="content-caption">Siren</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/three_generations_5.jpg" alt="Three Generations" class="content-image clickable-image">
+                                <p class="content-caption">Three Generations</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/choice_1.jpg" alt="Estate" class="content-image clickable-image">
+                                <p class="content-caption">Estate</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/choice_2.jpg" alt="Onion Domes" class="content-image clickable-image">
+                                <p class="content-caption">Onion Domes</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/choice_3.jpg" alt="Tipy Dagestana" class="content-image clickable-image">
+                                <p class="content-caption">Tipy Dagestana</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/Sculpture.jpg" alt="Sculpture" class="content-image clickable-image">
+                                <p class="content-caption">Sculpture</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj1/Saliuktin Mines.jpg" alt="Saliuktin Mines" class="content-image clickable-image">
+                                <p class="content-caption">Saliuktin Mines</p>
+                            </div>
+                        </div>
+
+                        <!-- Text box with placeholder -->
+                        <div class="section-description">
+                            <p>These were all the product of my final algorithm. Smaller images take less than half a second to process while the larger files took up to 30 seconds. 
+                                <br><br>All of the images above can be found at the Library of Congress gallery: <a href="https://www.loc.gov/collections/prokudin-gorskii/?st=grid" target="_blank">here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
